@@ -21,122 +21,90 @@
             overflow: hidden;
         }
 
+        /* 右側 A-Z 索引列 */
         .alphabet-sidebar {
             position: fixed;
             right: 8px; top: 50%;
             transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             z-index: 100;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 8px 4px;
+            border-radius: 15px; padding: 8px 4px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             backdrop-filter: blur(5px);
         }
 
         .alphabet-sidebar span {
-            font-size: 10px;
-            color: var(--accent-color);
-            cursor: pointer;
-            padding: 2px;
-            text-align: center;
-            font-weight: bold;
+            font-size: 10px; color: var(--accent-color);
+            cursor: pointer; padding: 2px; text-align: center; font-weight: bold;
         }
 
         .card-container {
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            flex-direction: column;
+            height: 100vh; width: 100vw;
+            display: flex; flex-direction: column;
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         .card {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            padding: 20px;
+            min-height: 100vh; width: 100%;
+            display: flex; justify-content: center; align-items: center;
+            box-sizing: border-box; padding: 20px;
         }
 
         .card-content {
             background: var(--card-bg);
-            width: 100%;
-            max-width: 450px;
-            min-height: 520px;
-            padding: 40px 30px;
-            border-radius: 40px;
+            width: 100%; max-width: 450px; min-height: 520px;
+            padding: 40px 30px; border-radius: 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
+            text-align: center; display: flex; flex-direction: column; justify-content: center;
         }
 
+        /* 模組標籤：強化視覺層次 */
         .module-badge {
-            font-size: 0.7rem;
+            display: inline-block;
+            align-self: center;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: var(--accent-color);
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            padding: 5px 15px;
+            border: 1.5px solid var(--accent-color);
+            border-radius: 50px;
         }
 
         .word-title {
-            font-size: 2.8rem;
-            color: var(--text-main);
-            margin: 0;
-            font-weight: 800;
+            font-size: 2.8rem; color: var(--text-main); margin: 0; font-weight: 800;
         }
 
         .audio-btn {
-            background: #f7fafc;
-            border: none;
-            width: 60px; height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            margin: 20px auto;
-            font-size: 24px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            background: #f7fafc; border: none;
+            width: 60px; height: 60px; border-radius: 50%;
+            cursor: pointer; margin: 20px auto;
+            font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .translation {
-            font-size: 1.4rem;
-            color: #4a5568;
-            margin-bottom: 15px;
-            font-weight: 600;
+            font-size: 1.4rem; color: #4a5568; margin-bottom: 15px; font-weight: 600;
         }
 
         .meaning {
-            font-size: 0.95rem;
-            color: var(--text-sub);
-            margin-bottom: 25px;
-            line-height: 1.5;
+            font-size: 0.95rem; color: var(--text-sub); margin-bottom: 25px; line-height: 1.5;
         }
 
         .example-box {
-            background: #f1f5f9;
-            padding: 20px;
-            border-radius: 20px;
-            color: #1e293b;
-            font-size: 1rem;
-            text-align: left;
+            background: #f1f5f9; padding: 20px; border-radius: 20px;
+            color: #1e293b; font-size: 1rem; text-align: left;
             border-left: 5px solid var(--accent-color);
         }
 
         .footer-info {
-            position: fixed;
-            bottom: 30px; left: 50%;
+            position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.05);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            color: var(--text-sub);
-            font-weight: bold;
+            background: rgba(0,0,0,0.05); padding: 5px 15px;
+            border-radius: 20px; font-size: 0.75rem;
+            color: var(--text-sub); font-weight: bold;
         }
     </style>
 </head>
