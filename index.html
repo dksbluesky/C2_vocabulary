@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Advanced Vocabulary Masterclass</title>
-    <meta name="theme-color" content="#667eea">
+    <title>C2 Advanced Vocabulary Masterclass</title>
     <style>
         :root {
             --primary-color: #2d3748;
@@ -19,10 +18,9 @@
             margin: 0; padding: 0;
             height: 100%; font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
-            overflow: hidden; /* 禁用原生滾動，實現翻頁感 */
+            overflow: hidden;
         }
 
-        /* 側邊 A-Z 快速索引 */
         .alphabet-sidebar {
             position: fixed;
             right: 8px; top: 50%;
@@ -44,14 +42,8 @@
             padding: 2px;
             text-align: center;
             font-weight: bold;
-            transition: transform 0.2s;
         }
 
-        .alphabet-sidebar span:active {
-            transform: scale(1.5);
-        }
-
-        /* 卡片容器：垂直排列 */
         .card-container {
             height: 100vh;
             width: 100vw;
@@ -60,7 +52,6 @@
             transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* 每一頁單字卡 */
         .card {
             min-height: 100vh;
             width: 100%;
@@ -75,7 +66,7 @@
             background: var(--card-bg);
             width: 100%;
             max-width: 450px;
-            min-height: 500px;
+            min-height: 520px;
             padding: 40px 30px;
             border-radius: 40px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
@@ -83,7 +74,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border: 1px solid rgba(255,255,255,0.3);
         }
 
         .module-badge {
@@ -96,7 +86,7 @@
         }
 
         .word-title {
-            font-size: 3rem;
+            font-size: 2.8rem;
             color: var(--text-main);
             margin: 0;
             font-weight: 800;
@@ -111,13 +101,6 @@
             margin: 20px auto;
             font-size: 24px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
-
-        .audio-btn:active {
-            background: var(--accent-color);
-            color: white;
-            transform: scale(0.9);
         }
 
         .translation {
@@ -128,10 +111,10 @@
         }
 
         .meaning {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: var(--text-sub);
             margin-bottom: 25px;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         .example-box {
@@ -139,13 +122,11 @@
             padding: 20px;
             border-radius: 20px;
             color: #1e293b;
-            font-size: 1.05rem;
+            font-size: 1rem;
             text-align: left;
-            position: relative;
             border-left: 5px solid var(--accent-color);
         }
 
-        /* 頁碼提示 */
         .footer-info {
             position: fixed;
             bottom: 30px; left: 50%;
@@ -157,27 +138,17 @@
             color: var(--text-sub);
             font-weight: bold;
         }
-
-        /* 搜尋提示框 (優化體驗) */
-        .search-hint {
-            position: fixed;
-            top: 20px; left: 20px;
-            font-size: 0.7rem;
-            color: var(--text-sub);
-        }
     </style>
 </head>
 <body>
 
-    <div class="search-hint" id="module-name">Module Name</div>
     <div class="alphabet-sidebar" id="sidebar"></div>
     <div class="card-container" id="container"></div>
     <div class="footer-info" id="counter">1 / 76</div>
 
     <script>
-        // 完整的 76 個單字資料庫
         const vocabularyData = [
-            // Module 1
+            // Module 1 (9)
             { "module": "Emotional Precision", "word": "fulfilling", "chinese_translation": "充實的 / 令人滿足的", "meaning": "Giving joy/satisfaction", "example": "I had a fulfilling day." },
             { "module": "Emotional Precision", "word": "drained", "chinese_translation": "精疲力竭的", "meaning": "Exhausted physically/emotionally", "example": "I feel drained after a long week." },
             { "module": "Emotional Precision", "word": "elated", "chinese_translation": "興高采烈的 / 欣喜若狂的", "meaning": "Deeply joyful", "example": "I was elated when I saw my results." },
@@ -187,7 +158,7 @@
             { "module": "Emotional Precision", "word": "unacceptable", "chinese_translation": "無法接受的", "meaning": "Advanced for 'bad'", "example": "This behavior is unacceptable." },
             { "module": "Emotional Precision", "word": "content", "chinese_translation": "滿足的 / 心滿意足的", "meaning": "Advanced for 'happy'", "example": "I am content with my life." },
             { "module": "Emotional Precision", "word": "intriguing", "chinese_translation": "引人入勝的 / 有趣的", "meaning": "Advanced for 'interesting'", "example": "It's an intriguing idea." },
-            // Module 2
+            // Module 2 (9)
             { "module": "Nuance & Character", "word": "brave", "chinese_translation": "勇敢的 (具體行為)", "meaning": "Short-term courageous action", "example": "She was brave to speak up." },
             { "module": "Nuance & Character", "word": "courageous", "chinese_translation": "英勇的 (長期特質)", "meaning": "Long-term character/spirit", "example": "He is a courageous leader." },
             { "module": "Nuance & Character", "word": "drastic", "chinese_translation": "劇烈的 / 猛烈的", "meaning": "Powerful/intense change", "example": "He made a drastic change." },
@@ -196,7 +167,8 @@
             { "module": "Nuance & Character", "word": "inevitable", "chinese_translation": "不可避免的", "meaning": "Unavoidable", "example": "Change is inevitable." },
             { "module": "Nuance & Character", "word": "ambiguous", "chinese_translation": "模稜兩可的", "meaning": "Unclear/multiple meanings", "example": "His message was ambiguous." },
             { "module": "Nuance & Character", "word": "versatile", "chinese_translation": "多才多藝的", "meaning": "Flexible/adaptable", "example": "She's a versatile actor." },
-            // Module 3
+            { "module": "Nuance & Character", "word": "outstanding", "chinese_translation": "優秀的 / 出眾的", "meaning": "Superior; excellent", "example": "She's an outstanding student." },
+            // Module 3 (12)
             { "module": "Professional Clarity", "word": "substantial", "chinese_translation": "大量的 / 實質的", "meaning": "Large/important (amount)", "example": "A substantial contribution." },
             { "module": "Professional Clarity", "word": "significant", "chinese_translation": "重大的 / 顯著的", "meaning": "Important/meaningful change", "example": "A significant difference." },
             { "module": "Professional Clarity", "word": "comprehensive", "chinese_translation": "全面的 / 詳盡的", "meaning": "Complete/covering all", "example": "A comprehensive report." },
@@ -207,7 +179,9 @@
             { "module": "Professional Clarity", "word": "implement", "chinese_translation": "實施 / 執行", "meaning": "To put a plan into action", "example": "Implement the new strategy." },
             { "module": "Professional Clarity", "word": "inefficient", "chinese_translation": "效率低下的", "meaning": "Wasting time/effort", "example": "This process is inefficient." },
             { "module": "Professional Clarity", "word": "lucid", "chinese_translation": "清晰易懂的", "meaning": "Clear and easy to understand", "example": "A lucid explanation." },
-            // Module 4
+            { "module": "Professional Clarity", "word": "efficient", "chinese_translation": "高效的 / 有效率的", "meaning": "Working in a well-organized way", "example": "The new process is far more efficient." },
+            { "module": "Professional Clarity", "word": "eloquent", "chinese_translation": "雄辯的 / 表達生動的", "meaning": "Fluent or persuasive in speaking", "example": "His response was eloquent and sincere." },
+            // Module 4 (13)
             { "module": "Growth & Resilience", "word": "resilient", "chinese_translation": "韌性強的", "meaning": "Recovering quickly from difficulty", "example": "Children are remarkably resilient." },
             { "module": "Growth & Resilience", "word": "perseverance", "chinese_translation": "毅力 / 不屈不撓", "meaning": "Determination over time", "example": "Perseverance leads to success." },
             { "module": "Growth & Resilience", "word": "transform", "chinese_translation": "徹底改變", "meaning": "To change completely", "example": "The experience transformed me." },
@@ -220,7 +194,8 @@
             { "module": "Growth & Resilience", "word": "emulate", "chinese_translation": "效仿 / 模仿", "meaning": "To follow a good example", "example": "Emulate excellence." },
             { "module": "Growth & Resilience", "word": "elevate", "chinese_translation": "提升", "meaning": "To lift higher (spirit/skill)", "example": "Elevate your potential." },
             { "module": "Growth & Resilience", "word": "reinvent", "chinese_translation": "重塑 / 改造", "meaning": "To change something for better", "example": "Reinvent yourself." },
-            // Module 5
+            { "module": "Growth & Resilience", "word": "convey", "chinese_translation": "傳達 / 表達", "meaning": "To communicate a message or feeling", "example": "Her smile conveyed warmth and kindness." },
+            // Module 5 (14)
             { "module": "EQ & Peace", "word": "empathetic", "chinese_translation": "具同理心的", "meaning": "Understanding others' feelings", "example": "An empathetic listener." },
             { "module": "EQ & Peace", "word": "intuitive", "chinese_translation": "直覺的", "meaning": "Based on natural understanding", "example": "An intuitive choice." },
             { "module": "EQ & Peace", "word": "benevolent", "chinese_translation": "仁慈的 / 慈善的", "meaning": "Kind and generous", "example": "A benevolent leader." },
@@ -233,7 +208,9 @@
             { "module": "EQ & Peace", "word": "compassionate", "chinese_translation": "有同情心的", "meaning": "Kindness toward suffering", "example": "Compassionate advice." },
             { "module": "EQ & Peace", "word": "equanimity", "chinese_translation": "處變不驚 / 鎮定", "meaning": "Mental calmness/balance", "example": "Handled with equanimity." },
             { "module": "EQ & Peace", "word": "mindful", "chinese_translation": "留心的 / 正念的", "meaning": "Present and attentive", "example": "Speak with mindful intention." },
-            // Module 6
+            { "module": "EQ & Peace", "word": "ecstatic", "chinese_translation": "欣喜若狂的", "meaning": "Extremely happy or excited", "example": "I was ecstatic when I got the news." },
+            { "module": "EQ & Peace", "word": "genuine", "chinese_translation": "真誠的 / 真正的", "meaning": "Real, honest, and pure", "example": "He is a genuine and loyal friend." },
+            // Module 6 (9)
             { "module": "Poetic Expression", "word": "awe", "chinese_translation": "敬畏 / 驚嘆", "meaning": "Wonder and respect", "example": "Stood in awe of the view." },
             { "module": "Poetic Expression", "word": "reverence", "chinese_translation": "崇敬 / 尊崇", "meaning": "Deep respect for the sacred", "example": "Spoke with reverence." },
             { "module": "Poetic Expression", "word": "ineffable", "chinese_translation": "語言難以形容的", "meaning": "Too great for words", "example": "Ineffable joy." },
@@ -242,7 +219,8 @@
             { "module": "Poetic Expression", "word": "ardent", "chinese_translation": "熱烈的 / 熱心的", "meaning": "Passionate/enthusiastic", "example": "An ardent learner." },
             { "module": "Poetic Expression", "word": "transcend", "chinese_translation": "超越", "meaning": "To rise above limits", "example": "Transcend fear." },
             { "module": "Poetic Expression", "word": "ethereal", "chinese_translation": "超凡脫俗的 / 飄逸的", "meaning": "Delicate and heavenly", "example": "Ethereal beauty." },
-            // Module 7
+            { "module": "Poetic Expression", "word": "aesthetic", "chinese_translation": "美學的 / 審美的", "meaning": "Related to beauty or art", "example": "The design is simple yet aesthetic." },
+            // Module 7 (10)
             { "module": "Inner World", "word": "serendipity", "chinese_translation": "機緣巧合", "meaning": "Pleasant unexpected surprise", "example": "It was pure serendipity." },
             { "module": "Inner World", "word": "epiphany", "chinese_translation": "頓悟", "meaning": "Sudden realization", "example": "I had an epiphany." },
             { "module": "Inner World", "word": "solitude", "chinese_translation": "獨處 (平和地)", "meaning": "Being alone peacefully", "example": "Enjoying my solitude." },
@@ -251,21 +229,19 @@
             { "module": "Inner World", "word": "ephemeral", "chinese_translation": "轉瞬即逝的", "meaning": "Lasting a short time", "example": "Ephemeral beauty." },
             { "module": "Inner World", "word": "discernment", "chinese_translation": "洞察力 / 辨別力", "meaning": "Judging wisely", "example": "Listen with discernment." },
             { "module": "Inner World", "word": "enlightened", "chinese_translation": "受啟發的 / 開明的", "meaning": "Wise and aware", "example": "An enlightened mind." },
-            { "module": "Inner World", "word": "resonant", "chinese_translation": "共鳴的 / 洪亮的", "meaning": "Deep/staying in memory", "example": "A resonant truth." }
+            { "module": "Inner World", "word": "resonant", "chinese_translation": "共鳴的 / 洪亮的", "meaning": "Deep/staying in memory", "example": "A resonant truth." },
+            { "module": "Inner World", "word": "subtle", "chinese_translation": "微妙的 / 不明顯的", "meaning": "Delicate; not obvious", "example": "There was a subtle change in her voice." }
         ];
 
-        // 字母排序
         vocabularyData.sort((a, b) => a.word.localeCompare(b.word));
 
         const container = document.getElementById('container');
         const sidebar = document.getElementById('sidebar');
         const counter = document.getElementById('counter');
-        const moduleNameDisplay = document.getElementById('module-name');
         let currentIndex = 0;
 
-        // 初始化卡片內容
         function initCards() {
-            vocabularyData.forEach((item, index) => {
+            vocabularyData.forEach((item) => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.innerHTML = `
@@ -277,7 +253,7 @@
                         <div class="meaning">${item.meaning}</div>
                         <div class="example-box">
                             <strong>Example:</strong><br>
-                            ${item.example}
+                            "${item.example}"
                         </div>
                     </div>
                 `;
@@ -285,7 +261,6 @@
             });
         }
 
-        // 初始化 A-Z 索引列
         function initSidebar() {
             const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
             letters.forEach(l => {
@@ -307,18 +282,16 @@
         function updateView() {
             container.style.transform = `translateY(-${currentIndex * 100}vh)`;
             counter.innerText = `${currentIndex + 1} / ${vocabularyData.length}`;
-            moduleNameDisplay.innerText = vocabularyData[currentIndex].module;
         }
 
         function speak(text) {
             const msg = new SpeechSynthesisUtterance();
             msg.text = text;
             msg.lang = 'en-US';
-            msg.rate = 0.85;
+            msg.rate = 0.8;
             window.speechSynthesis.speak(msg);
         }
 
-        // 滑動與手勢控制
         let touchStartY = 0;
         window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
         window.addEventListener('touchend', e => {
@@ -331,26 +304,12 @@
             }
         });
 
-        // 鍵盤控制
-        window.addEventListener('keydown', e => {
-            if (e.key === "ArrowDown" && currentIndex < vocabularyData.length - 1) currentIndex++;
-            if (e.key === "ArrowUp" && currentIndex > 0) currentIndex--;
-            updateView();
-        });
-
-        // 滾輪控制 (針對 PC)
         window.addEventListener('wheel', e => {
             if (e.deltaY > 0 && currentIndex < vocabularyData.length - 1) currentIndex++;
             else if (e.deltaY < 0 && currentIndex > 0) currentIndex--;
             updateView();
         }, { passive: true });
 
-        // 註冊 Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-
-        // 啟動
         initCards();
         initSidebar();
         updateView();
