@@ -1,286 +1,249 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>C2 Advanced Vocabulary Masterclass</title>
-    <style>
-        :root {
-            --primary-color: #2d3748;
-            --bg-color: #f0f4f8;
-            --card-bg: #ffffff;
-            --accent-color: #667eea;
-            --text-main: #1a202c;
-            --text-sub: #718096;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>C2 Vocab Upgrade</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #2563eb; --bg: #f8fafc; --card-bg: #ffffff; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1e293b; }
 
-        body, html {
-            margin: 0; padding: 0;
-            height: 100%; font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg-color);
-            overflow: hidden;
-        }
+    header { text-align: center; margin-bottom: 30px; }
+    h1 { font-weight: 800; color: #0f172a; margin: 0 0 10px 0; }
+    .filter-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 15px; }
+    .filter-btn {
+      border: none; background: #e2e8f0; color: #475569;
+      padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: 0.2s;
+    }
+    .filter-btn:hover { background: #cbd5e1; }
+    .filter-btn.active { background: var(--primary); color: white; }
 
-        /* 右側 A-Z 索引列 */
-        .alphabet-sidebar {
-            position: fixed;
-            right: 8px; top: 50%;
-            transform: translateY(-50%);
-            display: flex; flex-direction: column;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px; padding: 8px 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-        }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
 
-        .alphabet-sidebar span {
-            font-size: 10px; color: var(--accent-color);
-            cursor: pointer; padding: 2px; text-align: center; font-weight: bold;
-        }
+    .card {
+      background: var(--card-bg); border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      padding: 20px; border-left: 5px solid var(--primary);
+      transition: transform 0.2s;
+    }
+    .card:hover { transform: translateY(-3px); }
 
-        .card-container {
-            height: 100vh; width: 100vw;
-            display: flex; flex-direction: column;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
+    .top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .category-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600; }
 
-        .card {
-            min-height: 100vh; width: 100%;
-            display: flex; justify-content: center; align-items: center;
-            box-sizing: border-box; padding: 20px;
-        }
+    .word-comparison { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+    .basic-word { text-decoration: line-through; color: #94a3b8; font-size: 1rem; }
+    .arrow { color: #cbd5e1; }
+    .adv-word { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
 
-        .card-content {
-            background: var(--card-bg);
-            width: 100%; max-width: 450px; min-height: 520px;
-            padding: 40px 30px; border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-            text-align: center; display: flex; flex-direction: column; justify-content: center;
-        }
+    .moment { font-size: 0.95rem; font-weight: 600; color: #334155; margin-bottom: 4px; }
+    .definition { font-size: 0.9rem; color: #64748b; margin-bottom: 15px; line-height: 1.4; }
 
-        /* 模組標籤：強化視覺層次 */
-        .module-badge {
-            display: inline-block;
-            align-self: center;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--accent-color);
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 25px;
-            padding: 5px 15px;
-            border: 1.5px solid var(--accent-color);
-            border-radius: 50px;
-        }
-
-        .word-title {
-            font-size: 2.8rem; color: var(--text-main); margin: 0; font-weight: 800;
-        }
-
-        .audio-btn {
-            background: #f7fafc; border: none;
-            width: 60px; height: 60px; border-radius: 50%;
-            cursor: pointer; margin: 20px auto;
-            font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .translation {
-            font-size: 1.4rem; color: #4a5568; margin-bottom: 15px; font-weight: 600;
-        }
-
-        .meaning {
-            font-size: 0.95rem; color: var(--text-sub); margin-bottom: 25px; line-height: 1.5;
-        }
-
-        .example-box {
-            background: #f1f5f9; padding: 20px; border-radius: 20px;
-            color: #1e293b; font-size: 1rem; text-align: left;
-            border-left: 5px solid var(--accent-color);
-        }
-
-        .footer-info {
-            position: fixed; bottom: 30px; left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.05); padding: 5px 15px;
-            border-radius: 20px; font-size: 0.75rem;
-            color: var(--text-sub); font-weight: bold;
-        }
-    </style>
+    .example-box { background: #f1f5f9; padding: 10px; border-radius: 6px; font-style: italic; color: #475569; font-size: 0.9rem; }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>C2 Vocabulary Master</h1>
+    <div id="filter-container" class="filter-container"></div>
+  </header>
+  <div id="app" class="grid"></div>
 
-    <div class="alphabet-sidebar" id="sidebar"></div>
-    <div class="card-container" id="container"></div>
-    <div class="footer-info" id="counter">1 / 76</div>
+  <script>
+    const vocabData = [
+      {original:"Get",meaning:"To receive/obtain",advanced:"Acquire",moment:"To obtain for oneself; assets/skills",example:"The company plans to acquire new technology.",category:"Business"},
+      {original:"Enough",meaning:"Sufficient",advanced:"Adequate",moment:"Acceptable quality; minimum requirement",example:"The lighting was barely adequate.",category:"Logic"},
+      {original:"Useful",meaning:"Practical",advanced:"Advantageous",moment:"Creating favorable circumstances; strategic benefit",example:"The new tax law is advantageous to us.",category:"Business"},
+      {original:"Friendly",meaning:"Kind/pleasant",advanced:"Affable",moment:"Easy to speak to; social/professional warmth",example:"Our new manager is incredibly affable.",category:"Personality"},
+      {original:"Rich",meaning:"Wealthy",advanced:"Affluent",moment:"Having money; neighborhoods/groups",example:"He grew up in an affluent suburb.",category:"Status"},
+      {original:"Although",meaning:"Even though",advanced:"Albeit",moment:"Though; used to introduce a concession (often short)",example:"It was a useful albeit expensive lesson.",category:"Structure"},
+      {original:"Make better",meaning:"To ease pain",advanced:"Alleviate",moment:"To make suffering less severe; solutions",example:"We need new measures to alleviate poverty.",category:"Logic"},
+      {original:"Mix",meaning:"Combine",advanced:"Amalgamate",moment:"To combine or unite to form one organization or structure",example:"The two companies amalgamated last year.",category:"Business"},
+      {original:"Mixed feelings",meaning:"Unsure about something",advanced:"Ambivalent",moment:"Having mixed feelings or contradictory ideas; internal conflict",example:"I remain ambivalent about the merger.",category:"Logic"},
+      {original:"Old",meaning:"Long lived",advanced:"Ancient",moment:"Very distant past; history/tradition",example:"We visited the ancient ruins.",category:"Description"},
+      {original:"Strange thing",meaning:"Abnormal event",advanced:"Anomaly",moment:"Something that deviates from standard; data/science",example:"The snowy weather in June was an anomaly.",category:"Logic"},
+      {original:"Predict",meaning:"Foresee",advanced:"Anticipate",moment:"To regard as probable; expect or predict",example:"We do not anticipate any major problems.",category:"Time"},
+      {original:"Shocking",meaning:"Causing surprise/disgust",advanced:"Appalling",moment:"Causing shock or dismay; horrific",example:"The conditions in the prison were appalling.",category:"Description"},
+      {original:"Hard",meaning:"High effort",advanced:"Arduous",moment:"Involving strenuous effort; tiring tasks",example:"It was an arduous journey through the mountains.",category:"Description"},
+      {original:"Say",meaning:"To utter words",advanced:"Articulate",moment:"To express fluently; use for explaining complex ideas",example:"She articulated the plan perfectly.",category:"Communication"},
+      {original:"Surprised",meaning:"Feeling shock/wonder",advanced:"Astonished",moment:"Completely shocked; use when something is hard to believe",example:"I was absolutely astonished to see him.",category:"Emotion"},
+      {original:"Smart",meaning:"Intelligent",advanced:"Astute",moment:"Accurate assessment; business/political wit",example:"Her astute observations saved us money.",category:"Personality"},
+      {original:"Real",meaning:"Genuine",advanced:"Authentic",moment:"Of undisputed origin; genuine",example:"We ate authentic Italian food.",category:"Description"},
+      {original:"Confused",meaning:"Not understanding",advanced:"Baffled",moment:"Totally bewildered or perplexed; mental state",example:"I was baffled by the strange instructions.",category:"Personality"},
+      {original:"Good",meaning:"Helpful",advanced:"Beneficial",moment:"Resulting in good; favorable",example:"Regular exercise is beneficial for stress.",category:"Logic"},
+      {original:"Give",meaning:"To provide",advanced:"Bestow",moment:"To confer an honor; formal respect",example:"The title was bestowed upon him by the Queen.",category:"Action"},
+      {original:"Honest",meaning:"Truthful",advanced:"Candid",moment:"Straightforward; speaking openly on tough topics",example:"Thank you for being candid about the budget.",category:"Personality"},
+      {original:"Honest",meaning:"Truthful",advanced:"Candid",moment:"Truthful and straightforward; frank",example:"I will be completely candid with you.",category:"Personality"},
+      {original:"Stop",meaning:"To end",advanced:"Cease",moment:"To bring to an end; legal/official use",example:"The factory will cease operations next month.",category:"Business"},
+      {original:"Start",meaning:"To begin",advanced:"Commence",moment:"To begin; formal ceremonies/projects",example:"The meeting will commence at 9:00 AM.",category:"Business"},
+      {original:"Short",meaning:"Brief",advanced:"Concise",moment:"Giving a lot of information clearly and in a few words",example:"Make sure your report is concise.",category:"Communication"},
+      {original:"Agree",meaning:"Same opinion",advanced:"Concur",moment:"To be of same opinion; formal meetings",example:"The board members concurred with the CEO.",category:"Communication"},
+      {original:"So",meaning:"Result",advanced:"Consequently",moment:"As a result; professional reports",example:"Sales dropped; consequently we reduced the budget.",category:"Logic"},
+      {original:"Limit",meaning:"To restrict",advanced:"Constrain",moment:"To severely restrict the scope extent or activity of",example:"We are constrained by a tight budget.",category:"Business"},
+      {original:"Limit",meaning:"Restriction",advanced:"Constraint",moment:"A limitation or restriction; project management",example:"We must work within the budget constraints.",category:"Logic"},
+      {original:"Think",meaning:"To have an opinion",advanced:"Contemplate",moment:"To look thoughtfully; use for deep decision making",example:"I need time to contemplate my future.",category:"Intellect"},
+      {original:"However",meaning:"But/Contrast",advanced:"Conversely",moment:"Introducing a statement that reverses the previous one",example:"He loves the city; conversely she prefers the country.",category:"Structure"},
+      {original:"Complicated",meaning:"Hard to understand",advanced:"Convoluted",moment:"Extremely complex and difficult to follow; messy logic",example:"His explanation was long and convoluted.",category:"Description"},
+      {original:"Fake",meaning:"Not real",advanced:"Counterfeit",moment:"Made in exact imitation of something valuable; legal/crime",example:"They were caught selling counterfeit bags.",category:"Description"},
+      {original:"Grow",meaning:"To develop",advanced:"Cultivate",moment:"To try to acquire or develop (a quality or skill)",example:"We must cultivate a culture of innovation.",category:"Action"},
+      {original:"Limit",meaning:"To reduce",advanced:"Curtail",moment:"To reduce in extent or quantity; impose a restriction on",example:"We must curtail our spending.",category:"Business"},
+      {original:"Loud",meaning:"Making great noise",advanced:"Deafening",moment:"So loud as to make it impossible to hear; extreme noise",example:"The applause was deafening.",category:"Description"},
+      {original:"Empty",meaning:"Containing nothing",advanced:"Desolate",moment:"Place that is bleak and empty; sadness/loneliness",example:"The landscape was gray and desolate.",category:"Description"},
+      {original:"Bad",meaning:"Harmful",advanced:"Detrimental",moment:"Tending to cause harm; negative impact",example:"Smoking is detrimental to your health.",category:"Logic"},
+      {original:"Sad",meaning:"Feeling sorrow/unhappiness",advanced:"Devastated",moment:"Overwhelmed by grief; use for deep life-altering sadness",example:"I was devastated when she left.",category:"Emotion"},
+      {original:"Problem",meaning:"Difficult choice",advanced:"Dilemma",moment:"A situation requiring a difficult choice; moral/ethical",example:"He faced a moral dilemma.",category:"Logic"},
+      {original:"Spread",meaning:"To distribute",advanced:"Disseminate",moment:"To spread (something especially information) widely",example:"They use the internet to disseminate information.",category:"Communication"},
+      {original:"Tired",meaning:"Needing rest; physical exhaustion",advanced:"Drained",moment:"Completely empty of energy; use for physical/emotional burnout",example:"I feel drained after a long week.",category:"Physical State"},
+      {original:"Easy",meaning:"Low effort",advanced:"Effortless",moment:"Appearing to need no effort; high skill",example:"Her performance seemed entirely effortless.",category:"Description"},
+      {original:"Happy",meaning:"Feeling pleasure/contentment",advanced:"Elated",moment:"Extremely happy/excited; use for peak moments/achievements",example:"I was elated when I saw the exam results.",category:"Emotion"},
+      {original:"Explain",meaning:"To make clear",advanced:"Elucidate",moment:"To clarify; difficult points/theory",example:"The professor elucidated the complex theory.",category:"Communication"},
+      {original:"Copy",meaning:"To imitate",advanced:"Emulate",moment:"To match or surpass (a person or achievement)",example:"He hoped to emulate the success of his mentor.",category:"Action"},
+      {original:"Try",meaning:"To attempt",advanced:"Endeavor",moment:"To try hard; formal commitment",example:"We will endeavor to finish on time.",category:"Action"},
+      {original:"Improve",meaning:"To make better",advanced:"Enhance",moment:"To intensify increase or further improve the quality",example:"This filter will enhance the photo quality.",category:"Action"},
+      {original:"Interesting",meaning:"Holding attention",advanced:"Engrossing",moment:"Absorbing all one's attention; fully focused",example:"She was reading an engrossing book.",category:"Description"},
+      {original:"Big",meaning:"Large in size",advanced:"Enormous",moment:"Immense; use to emphasize grandeur or scale",example:"The stadium is enormous.",category:"Description"},
+      {original:"Remove",meaning:"To get rid of",advanced:"Eradicate",moment:"To destroy completely; put an end to (diseases/poverty)",example:"The government aims to eradicate poverty.",category:"Action"},
+      {original:"Wrong",meaning:"Incorrect",advanced:"Erroneous",moment:"Containing error; data/facts",example:"The report was based on erroneous information.",category:"Logic"},
+      {original:"Equal",meaning:"The same",advanced:"Equivalent",moment:"Equal in value/amount; comparisons",example:"One dollar is equivalent to roughly 0.9 Euro.",category:"Logic"},
+      {original:"Make worse",meaning:"To aggravate",advanced:"Exacerbate",moment:"To make a bad situation worse; health/conflict",example:"Stress will only exacerbate your illness.",category:"Logic"},
+      {original:"Worse",meaning:"To make worse",advanced:"Exacerbate",moment:"To make a problem bad situation or negative feeling worse",example:"Stress will only exacerbate your illness.",category:"Action"},
+      {original:"Look at",meaning:"Visual attention",advanced:"Examine",moment:"To look closely; detailed analysis",example:"The auditor will examine the financial records.",category:"Action"},
+      {original:"Painful",meaning:"Causing physical pain",advanced:"Excruciating",moment:"Intensely painful; extreme physical suffering",example:"She had an excruciating headache.",category:"Description"},
+      {original:"Expensive",meaning:"Costing a lot",advanced:"Exorbitant",moment:"Unreasonably high price; money",example:"They charge exorbitant rates for room service.",category:"Business"},
+      {original:"Tasty",meaning:"Good flavor",advanced:"Exquisite",moment:"Extremely beautiful and typically delicate; high quality",example:"The food was absolutely exquisite.",category:"Sensory"},
+      {original:"Help",meaning:"To make easier",advanced:"Facilitate",moment:"To make a process easier; use in professional contexts",example:"The software facilitates remote work.",category:"Business"},
+      {original:"Possible",meaning:"Can be done",advanced:"Feasible",moment:"Possible to do easily; business plans",example:"It is a feasible solution to our problem.",category:"Logic"},
+      {original:"Dirty",meaning:"Not clean",advanced:"Filthy",moment:"Disgustingly dirty; extreme state",example:"The abandoned house was filthy.",category:"Description"},
+      {original:"Brief",meaning:"Short time",advanced:"Fleeting",moment:"Lasting very short time; emotions/glimpses",example:"He caught a fleeting glimpse of the deer.",category:"Time"},
+      {original:"Weak",meaning:"Not strong (thing)",advanced:"Flimsy",moment:"Insubstantial and easily damaged; poor quality/arguments",example:"That is a flimsy excuse for being late.",category:"Description"},
+      {original:"Bravery",meaning:"Courage in pain",advanced:"Fortitude",moment:"Courage in pain or adversity; inner strength",example:"He endured the illness with great fortitude.",category:"Personality"},
+      {original:"Lucky",meaning:"Good fortune",advanced:"Fortunate",moment:"Favored by or involving good luck; formal gratitude",example:"We are fortunate to have such a great team.",category:"Emotion"},
+      {original:"Cold",meaning:"Low temperature",advanced:"Freezing",moment:"Very cold; use for biting icy conditions",example:"The water is freezing.",category:"Description"},
+      {original:"Cheap",meaning:"Low price (person)",advanced:"Frugal",moment:"Sparing or economical with money; careful spender",example:"He is a frugal man who saves every penny.",category:"Business"},
+      {original:"Good",meaning:"Satisfactory; general positive feeling",advanced:"Fulfilling",moment:"Providing a sense of purpose; use for deep satisfaction",example:"It was a fulfilling day at work.",category:"Emotion"},
+      {original:"Angry",meaning:"Feeling strong displeasure",advanced:"Furious",moment:"Extremely angry; use for intense high-energy situations",example:"The customer was furious about the delay.",category:"Emotion"},
+      {original:"Also",meaning:"In addition",advanced:"Furthermore",moment:"In addition to what has been said; building an argument",example:"Furthermore we must consider the cost.",category:"Structure"},
+      {original:"Funny",meaning:"Amusing",advanced:"Hilarious",moment:"Extremely funny; high energy",example:"The comedian's performance was hilarious.",category:"Personality"},
+      {original:"After realization",meaning:"Realizing late",advanced:"Hindsight",moment:"Understanding of a situation or event only after it has happened",example:"With the benefit of hindsight we would have done it differently.",category:"Time"},
+      {original:"Quiet",meaning:"Making little noise",advanced:"Hushed",moment:"Quiet/still; often used for expectant silence",example:"A hushed silence fell over the crowd.",category:"Description"},
+      {original:"Show",meaning:"To allow to be visible",advanced:"Illustrate",moment:"To serve as an example; use for evidence/graphs",example:"This graph illustrates the sales growth.",category:"Communication"},
+      {original:"Likely",meaning:"Probable",advanced:"Imminent",moment:"About to happen (usually something bad or important)",example:"They believed they were in imminent danger.",category:"Time"},
+      {original:"Perfect",meaning:"No mistakes",advanced:"Impeccable",moment:"In accordance with the highest standards; faultless",example:"Her taste in fashion is impeccable.",category:"Description"},
+      {original:"Necessary",meaning:"Needed",advanced:"Imperative",moment:"Of vital importance; crucial",example:"It is imperative that we act now.",category:"Business"},
+      {original:"Result",meaning:"Outcome",advanced:"Implication",moment:"The conclusion that can be drawn; hidden meaning",example:"The implication is that we need more money.",category:"Logic"},
+      {original:"Poor",meaning:"Lacking money",advanced:"Impoverished",moment:"Made poor; serious hardship",example:"The charity helps people in impoverished areas.",category:"Status"},
+      {original:"Impossible",meaning:"Cannot be done",advanced:"Infeasible",moment:"Not possible; unrealistic plans",example:"The costs make the project infeasible.",category:"Logic"},
+      {original:"New",meaning:"Not existing before",advanced:"Innovative",moment:"Featuring new methods; creativity/tech",example:"They proposed an innovative solution.",category:"Description"},
+      {original:"Understanding",meaning:"Deep view",advanced:"Insight",moment:"The capacity to gain an accurate and deep intuitive understanding",example:"Her book offers great insight into the problem.",category:"Intellect"},
+      {original:"Complex",meaning:"Many parts/difficult",advanced:"Intricate",moment:"Very complicated or detailed; fine details",example:"The plot of the movie was too intricate to follow.",category:"Description"},
+      {original:"Look Inside",meaning:"Examine feelings",advanced:"Introspect",moment:"To examine one's own thoughts or feelings",example:"I need some time to introspect before deciding.",category:"Intellect"},
+      {original:"Always",meaning:"At all times",advanced:"Invariably",moment:"In every case; consistent patterns",example:"The train is invariably late on Mondays.",category:"Logic"},
+      {original:"Lazy",meaning:"Unwilling to work",advanced:"Lethargic",moment:"Lacking energy or enthusiasm; physical state",example:"The heat made us all feel lethargic.",category:"Personality"},
+      {original:"Clear",meaning:"Easy to understand",advanced:"Lucid",moment:"Expressed clearly; explanations/mindset",example:"He gave a lucid account of the events.",category:"Communication"},
+      {original:"Show (emotion)",meaning:"To display",advanced:"Manifest",moment:"To show by acts/appearance; symptoms/feelings",example:"His anxiety manifested as a nervous tic.",category:"Action"},
+      {original:"Careful",meaning:"Showing care",advanced:"Meticulous",moment:"Showing great attention to detail; very precise",example:"The project required meticulous planning.",category:"Personality"},
+      {original:"Only",meaning:"Just",advanced:"Merely",moment:"Just; only (often used to minimize importance)",example:"It is merely a scratch.",category:"Logic"},
+      {original:"Small",meaning:"Little in size",advanced:"Minute",moment:"Extremely small; use for tiny precise details (pronounced my-newt)",example:"He adjusted the minute gears of the watch.",category:"Description"},
+      {original:"Plus",meaning:"And also",advanced:"Moreover",moment:"Besides that; emphasizing a new point",example:"Moreover the design is outdated.",category:"Structure"},
+      {original:"Boring",meaning:"Lacking excitement",advanced:"Mundane",moment:"Lacking interest or excitement; dull/everyday",example:"He wanted to escape his mundane life.",category:"Description"},
+      {original:"But",meaning:"Contrast",advanced:"Nevertheless",moment:"In spite of that; formal/persuasive",example:"The task was difficult; nevertheless we finished it.",category:"Logic"},
+      {original:"Small difference",meaning:"Subtle distinction",advanced:"Nuance",moment:"A subtle shade of meaning or sound; depth",example:"She understands the nuances of local culture.",category:"Logic"},
+      {original:"Difference",meaning:"Small distinction",advanced:"Nuance",moment:"A subtle difference in or shade of meaning/sound",example:"He understood the nuances of the local dialect.",category:"Logic"},
+      {original:"Forget",meaning:"Fail to remember",advanced:"Oblivious",moment:"Not aware of surroundings; lack of attention",example:"He was oblivious to the danger.",category:"Intellect"},
+      {original:"Stubborn",meaning:"Refusing to change",advanced:"Obstinate",moment:"Stubbornly refusing to change one's opinion; personality",example:"He can be very obstinate when he wants to be.",category:"Personality"},
+      {original:"Mistake",meaning:"Missed detail",advanced:"Oversight",moment:"An unintentional failure to notice or do something",example:"The error was a simple oversight.",category:"Logic"},
+      {original:"Because of",meaning:"Due to",advanced:"Owing to",moment:"Because of; formal reasoning",example:"The game was cancelled owing to the rain.",category:"Structure"},
+      {original:"Crowded",meaning:"Full of people",advanced:"Packed",moment:"Completely full; no space left",example:"The train was packed this morning.",category:"Description"},
+      {original:"Contradiction",meaning:"Opposing ideas",advanced:"Paradox",moment:"A situation that seems impossible/contradictory; logic",example:"It is a paradox that technology connects us yet isolates us.",category:"Logic"},
+      {original:"Maybe",meaning:"Perhaps",advanced:"Peradventure",moment:"Perhaps; archaic/literary style",example:"Peradventure we shall meet again.",category:"Logic"},
+      {original:"Dangerous",meaning:"Risky",advanced:"Perilous",moment:"Full of danger; high stakes/physical risk",example:"The hikers began their perilous climb.",category:"Description"},
+      {original:"Confused",meaning:"Puzzled",advanced:"Perplexed",moment:"Completely baffled; very puzzled",example:"She looked perplexed by the complicated question.",category:"Emotion"},
+      {original:"Viewpoint",meaning:"Point of view",advanced:"Perspective",moment:"A particular attitude toward or way of regarding something",example:"Try to look at it from my perspective.",category:"Intellect"},
+      {original:"Scary",meaning:"Causing fear",advanced:"Petrifying",moment:"So frightening that one is unable to move; paralysis",example:"The scream was petrifying.",category:"Description"},
+      {original:"Important",meaning:"Valuable",advanced:"Pivotal",moment:"Crucial importance; turning points/success",example:"This meeting is pivotal for our future.",category:"Business"},
+      {original:"Think about",meaning:"To consider",advanced:"Ponder",moment:"To think carefully; philosophical reflection",example:"I spent the evening pondering the meaning of life.",category:"Intellect"},
+      {original:"Mainly",meaning:"Mostly",advanced:"Predominantly",moment:"Mainly; for the most part",example:"The population is predominantly rural.",category:"Logic"},
+      {original:"Before",meaning:"Earlier than",advanced:"Prior to",moment:"Before; formal scheduling/time",example:"Please arrive prior to the start of the show.",category:"Time"},
+      {original:"Job",meaning:"Employment",advanced:"Profession",moment:"Paid occupation requiring training",example:"She is at the top of her profession.",category:"Business"},
+      {original:"Deep",meaning:"Far down/in",advanced:"Profound",moment:"Very great or intense; showing great knowledge",example:"The book had a profound effect on me.",category:"Description"},
+      {original:"Suggestion",meaning:"Idea put forward",advanced:"Proposition",moment:"A statement or assertion that expresses a judgment or opinion",example:"I have a business proposition for you.",category:"Business"},
+      {original:"Future view",meaning:"Possibility",advanced:"Prospect",moment:"The possibility or likelihood of some future event occurring",example:"The prospect of moving to a new city is exciting.",category:"Time"},
+      {original:"Smell",meaning:"Strong scent",advanced:"Pungent",moment:"Having a sharply strong taste or smell; sensory",example:"The pungent smell of onions filled the room.",category:"Sensory"},
+      {original:"Fast",meaning:"High speed",advanced:"Rapid",moment:"Happening in a short time; growth/movement",example:"The city underwent rapid expansion.",category:"Description"},
+      {original:"Remember",meaning:"To recall",advanced:"Recollect",moment:"To call to mind; formal storytelling",example:"I don't recollect seeing him there.",category:"Intellect"},
+      {original:"Recall",meaning:"Remember",advanced:"Reminisce",moment:"To indulge in enjoyable recollection of past events",example:"We spent the evening reminiscing about our college days.",category:"Emotion"},
+      {original:"Famous",meaning:"Well-known",advanced:"Renowned",moment:"Talked about by many; high prestige",example:"She is a renowned expert in her field.",category:"Status"},
+      {original:"Keep",meaning:"To hold/possess",advanced:"Retain",moment:"To continue to have; information/staff",example:"We need to retain our best employees.",category:"Business"},
+      {original:"Look Back",meaning:"Review past",advanced:"Retrospect",moment:"A survey or review of a past course of events or period of time",example:"In retrospect I should have studied harder.",category:"Time"},
+      {original:"Strong",meaning:"Powerful",advanced:"Robust",moment:"Strong and healthy; vigorous (objects/systems)",example:"The company has a robust security system.",category:"Description"},
+      {original:"Basic",meaning:"Simple/Early stage",advanced:"Rudimentary",moment:"Involving or limited to basic principles",example:"He has only a rudimentary knowledge of French.",category:"Description"},
+      {original:"Hot",meaning:"High temperature",advanced:"Scorching",moment:"Extremely hot; use for intense uncomfortable heat",example:"It was a scorching day in the desert.",category:"Description"},
+      {original:"Check",meaning:"Look closely",advanced:"Scrutinize",moment:"To examine or inspect thoroughly; investigation",example:"The media will scrutinize the politician's past.",category:"Logic"},
+      {original:"Quiet",meaning:"Low noise",advanced:"Serene",moment:"Calm/peaceful; atmosphere/nature",example:"The lake looked serene at sunrise.",category:"Description"},
+      {original:"Disbelieve",meaning:"Not believe",advanced:"Skeptical",moment:"Having doubts; intellectual caution",example:"I am skeptical about the results.",category:"Intellect"},
+      {original:"Slow",meaning:"Low speed",advanced:"Sluggish",moment:"Lacking energy; economy/physical state",example:"The market was sluggish during the winter.",category:"Description"},
+      {original:"Guess",meaning:"To form a theory",advanced:"Speculate",moment:"To form a theory without firm evidence",example:"We can only speculate about the reasons.",category:"Intellect"},
+      {original:"Clean",meaning:"Not dirty",advanced:"Spotless",moment:"Absolutely clean; perfection",example:"Her kitchen is always spotless.",category:"Description"},
+      {original:"Hungry",meaning:"Wanting food",advanced:"Starving",moment:"Suffering from hunger; exaggeration",example:"I missed lunch and I'm starving.",category:"Physical State"},
+      {original:"After",meaning:"Later in time",advanced:"Subsequently",moment:"After a particular thing has happened; sequence of events",example:"He was arrested and subsequently released.",category:"Time"},
+      {original:"Prove",meaning:"To show truth",advanced:"Substantiate",moment:"To provide evidence to support or prove the truth of",example:"You must substantiate your claims with data.",category:"Logic"},
+      {original:"Boss",meaning:"Manager",advanced:"Superior",moment:"Person higher in rank; formal hierarchy",example:"Report any issues to your immediate superior.",category:"Business"},
+      {original:"Busy",meaning:"Occupied",advanced:"Swamped",moment:"Overwhelmed; extreme workload",example:"I'd love to help but I'm swamped.",category:"State"},
+      {original:"Boring",meaning:"Not interesting",advanced:"Tedious",moment:"Too long slow or dull; tiresome tasks",example:"Filing papers is a tedious job.",category:"Description"},
+      {original:"Determination",meaning:"Not giving up",advanced:"Tenacity",moment:"The quality or fact of being very determined; gripping firmly",example:"She showed great tenacity in the face of failure.",category:"Personality"},
+      {original:"So",meaning:"Therefore",advanced:"Thus",moment:"As a result; logical conclusion",example:"The evidence is clear; thus we must act.",category:"Structure"},
+      {original:"Shy",meaning:"Nervous with people",advanced:"Timid",moment:"Showing a lack of courage or confidence; personality",example:"The timid child hid behind his mother.",category:"Personality"},
+      {original:"Change",meaning:"To make different",advanced:"Transform",moment:"To make a dramatic change; use for major positive results",example:"The new software transformed our workflow.",category:"Business"},
+      {original:"Common",meaning:"Frequent",advanced:"Ubiquitous",moment:"Found everywhere; trends/tech",example:"Mobile phones are now ubiquitous.",category:"Description"},
+      {original:"Unlucky",meaning:"Bad fortune",advanced:"Unfortunate",moment:"Having or marked by bad luck; polite regret",example:"It was an unfortunate series of events.",category:"Emotion"},
+      {original:"Use",meaning:"To employ",advanced:"Utilize",moment:"To make effective use of; technical/resources",example:"We must utilize our resources efficiently.",category:"Business"},
+      {original:"Brave",meaning:"Courageous",advanced:"Valiant",moment:"Showing determination; heroic efforts",example:"They made a valiant attempt to save the company.",category:"Personality"},
+      {original:"Bright",meaning:"Strong color/light",advanced:"Vibrant",moment:"Full of energy and life; color",example:"The city is famous for its vibrant nightlife.",category:"Description"},
+      {original:"Funny",meaning:"Causing laughter",advanced:"Witty",moment:"Showing quick and inventive verbal humor; smart funny",example:"He is known for his witty remarks.",category:"Description"}
+    ];
 
-    <script>
-        const vocabularyData = [
-            // Module 1 (9)
-            { "module": "Emotional Precision", "word": "fulfilling", "chinese_translation": "充實的 / 令人滿足的", "meaning": "Giving joy/satisfaction", "example": "I had a fulfilling day." },
-            { "module": "Emotional Precision", "word": "drained", "chinese_translation": "精疲力竭的", "meaning": "Exhausted physically/emotionally", "example": "I feel drained after a long week." },
-            { "module": "Emotional Precision", "word": "elated", "chinese_translation": "興高采烈的 / 欣喜若狂的", "meaning": "Deeply joyful", "example": "I was elated when I saw my results." },
-            { "module": "Emotional Precision", "word": "devastated", "chinese_translation": "極度震驚的 / 崩潰的", "meaning": "Deeply sad/heartbroken", "example": "I was devastated when she left." },
-            { "module": "Emotional Precision", "word": "astonished", "chinese_translation": "驚訝萬分的", "meaning": "Completely amazed", "example": "I was absolutely astonished." },
-            { "module": "Emotional Precision", "word": "remarkable", "chinese_translation": "非凡的 / 卓越的", "meaning": "Advanced for 'good'", "example": "The results were remarkable." },
-            { "module": "Emotional Precision", "word": "unacceptable", "chinese_translation": "無法接受的", "meaning": "Advanced for 'bad'", "example": "This behavior is unacceptable." },
-            { "module": "Emotional Precision", "word": "content", "chinese_translation": "滿足的 / 心滿意足的", "meaning": "Advanced for 'happy'", "example": "I am content with my life." },
-            { "module": "Emotional Precision", "word": "intriguing", "chinese_translation": "引人入勝的 / 有趣的", "meaning": "Advanced for 'interesting'", "example": "It's an intriguing idea." },
-            // Module 2 (9)
-            { "module": "Nuance & Character", "word": "brave", "chinese_translation": "勇敢的 (具體行為)", "meaning": "Short-term courageous action", "example": "She was brave to speak up." },
-            { "module": "Nuance & Character", "word": "courageous", "chinese_translation": "英勇的 (長期特質)", "meaning": "Long-term character/spirit", "example": "He is a courageous leader." },
-            { "module": "Nuance & Character", "word": "drastic", "chinese_translation": "劇烈的 / 猛烈的", "meaning": "Powerful/intense change", "example": "He made a drastic change." },
-            { "module": "Nuance & Character", "word": "exceptional", "chinese_translation": "卓越的 / 傑出的", "meaning": "Outstanding/polished", "example": "She's an exceptional student." },
-            { "module": "Nuance & Character", "word": "meticulous", "chinese_translation": "一絲不苟的 / 細緻的", "meaning": "Careful and detailed", "example": "She's a meticulous planner." },
-            { "module": "Nuance & Character", "word": "inevitable", "chinese_translation": "不可避免的", "meaning": "Unavoidable", "example": "Change is inevitable." },
-            { "module": "Nuance & Character", "word": "ambiguous", "chinese_translation": "模稜兩可的", "meaning": "Unclear/multiple meanings", "example": "His message was ambiguous." },
-            { "module": "Nuance & Character", "word": "versatile", "chinese_translation": "多才多藝的", "meaning": "Flexible/adaptable", "example": "She's a versatile actor." },
-            { "module": "Nuance & Character", "word": "outstanding", "chinese_translation": "優秀的 / 出眾的", "meaning": "Superior; excellent", "example": "She's an outstanding student." },
-            // Module 3 (12)
-            { "module": "Professional Clarity", "word": "substantial", "chinese_translation": "大量的 / 實質的", "meaning": "Large/important (amount)", "example": "A substantial contribution." },
-            { "module": "Professional Clarity", "word": "significant", "chinese_translation": "重大的 / 顯著的", "meaning": "Important/meaningful change", "example": "A significant difference." },
-            { "module": "Professional Clarity", "word": "comprehensive", "chinese_translation": "全面的 / 詳盡的", "meaning": "Complete/covering all", "example": "A comprehensive report." },
-            { "module": "Professional Clarity", "word": "analytical", "chinese_translation": "善於分析的", "meaning": "Logical/detailed thinking", "example": "An analytical mind." },
-            { "module": "Professional Clarity", "word": "precise", "chinese_translation": "精確的 / 準確的", "meaning": "Exact and clear", "example": "Be precise with your words." },
-            { "module": "Professional Clarity", "word": "articulate", "chinese_translation": "表達清晰的", "meaning": "Expressing ideas clearly", "example": "She is an articulate speaker." },
-            { "module": "Professional Clarity", "word": "elaborate", "chinese_translation": "詳盡闡述", "meaning": "To explain in more detail", "example": "Could you elaborate on that?" },
-            { "module": "Professional Clarity", "word": "implement", "chinese_translation": "實施 / 執行", "meaning": "To put a plan into action", "example": "Implement the new strategy." },
-            { "module": "Professional Clarity", "word": "inefficient", "chinese_translation": "效率低下的", "meaning": "Wasting time/effort", "example": "This process is inefficient." },
-            { "module": "Professional Clarity", "word": "lucid", "chinese_translation": "清晰易懂的", "meaning": "Clear and easy to understand", "example": "A lucid explanation." },
-            { "module": "Professional Clarity", "word": "efficient", "chinese_translation": "高效的 / 有效率的", "meaning": "Working in a well-organized way", "example": "The new process is far more efficient." },
-            { "module": "Professional Clarity", "word": "eloquent", "chinese_translation": "雄辯的 / 表達生動的", "meaning": "Fluent or persuasive in speaking", "example": "His response was eloquent and sincere." },
-            // Module 4 (13)
-            { "module": "Growth & Resilience", "word": "resilient", "chinese_translation": "韌性強的", "meaning": "Recovering quickly from difficulty", "example": "Children are remarkably resilient." },
-            { "module": "Growth & Resilience", "word": "perseverance", "chinese_translation": "毅力 / 不屈不撓", "meaning": "Determination over time", "example": "Perseverance leads to success." },
-            { "module": "Growth & Resilience", "word": "transform", "chinese_translation": "徹底改變", "meaning": "To change completely", "example": "The experience transformed me." },
-            { "module": "Growth & Resilience", "word": "evolve", "chinese_translation": "演變 / 進化", "meaning": "To grow gradually", "example": "Our understanding evolves." },
-            { "module": "Growth & Resilience", "word": "innovative", "chinese_translation": "創新的", "meaning": "Original/creative ideas", "example": "An innovative approach." },
-            { "module": "Growth & Resilience", "word": "profound", "chinese_translation": "深遠的 / 深刻的", "meaning": "Deep and meaningful", "example": "A profound impact." },
-            { "module": "Growth & Resilience", "word": "insightful", "chinese_translation": "具洞察力的", "meaning": "Deep understanding", "example": "An insightful comment." },
-            { "module": "Growth & Resilience", "word": "metamorphosis", "chinese_translation": "蛻變 / 徹底改變", "meaning": "Complete transformation", "example": "A personal metamorphosis." },
-            { "module": "Growth & Resilience", "word": "cultivate", "chinese_translation": "培養 / 耕耘", "meaning": "To develop carefully over time", "example": "Cultivate patience." },
-            { "module": "Growth & Resilience", "word": "emulate", "chinese_translation": "效仿 / 模仿", "meaning": "To follow a good example", "example": "Emulate excellence." },
-            { "module": "Growth & Resilience", "word": "elevate", "chinese_translation": "提升", "meaning": "To lift higher (spirit/skill)", "example": "Elevate your potential." },
-            { "module": "Growth & Resilience", "word": "reinvent", "chinese_translation": "重塑 / 改造", "meaning": "To change something for better", "example": "Reinvent yourself." },
-            { "module": "Growth & Resilience", "word": "convey", "chinese_translation": "傳達 / 表達", "meaning": "To communicate a message or feeling", "example": "Her smile conveyed warmth and kindness." },
-            // Module 5 (14)
-            { "module": "EQ & Peace", "word": "empathetic", "chinese_translation": "具同理心的", "meaning": "Understanding others' feelings", "example": "An empathetic listener." },
-            { "module": "EQ & Peace", "word": "intuitive", "chinese_translation": "直覺的", "meaning": "Based on natural understanding", "example": "An intuitive choice." },
-            { "module": "EQ & Peace", "word": "benevolent", "chinese_translation": "仁慈的 / 慈善的", "meaning": "Kind and generous", "example": "A benevolent leader." },
-            { "module": "EQ & Peace", "word": "magnanimous", "chinese_translation": "寬宏大量的", "meaning": "Generous and forgiving", "example": "Magnanimous in victory." },
-            { "module": "EQ & Peace", "word": "serene", "chinese_translation": "寧靜的 / 安詳的", "meaning": "Peaceful and calm", "example": "A serene tone." },
-            { "module": "EQ & Peace", "word": "tranquil", "chinese_translation": "恬靜的 / 平靜的", "meaning": "Still and quiet", "example": "A tranquil garden." },
-            { "module": "EQ & Peace", "word": "authentic", "chinese_translation": "真實的 / 道地的", "meaning": "Real/genuine", "example": "Stay authentic to yourself." },
-            { "module": "EQ & Peace", "word": "sincere", "chinese_translation": "真誠的", "meaning": "Heartfelt/honest", "example": "A sincere apology." },
-            { "module": "EQ & Peace", "word": "graceful", "chinese_translation": "優雅的", "meaning": "Elegant and polite", "example": "Accepted it gracefully." },
-            { "module": "EQ & Peace", "word": "compassionate", "chinese_translation": "有同情心的", "meaning": "Kindness toward suffering", "example": "Compassionate advice." },
-            { "module": "EQ & Peace", "word": "equanimity", "chinese_translation": "處變不驚 / 鎮定", "meaning": "Mental calmness/balance", "example": "Handled with equanimity." },
-            { "module": "EQ & Peace", "word": "mindful", "chinese_translation": "留心的 / 正念的", "meaning": "Present and attentive", "example": "Speak with mindful intention." },
-            { "module": "EQ & Peace", "word": "ecstatic", "chinese_translation": "欣喜若狂的", "meaning": "Extremely happy or excited", "example": "I was ecstatic when I got the news." },
-            { "module": "EQ & Peace", "word": "genuine", "chinese_translation": "真誠的 / 真正的", "meaning": "Real, honest, and pure", "example": "He is a genuine and loyal friend." },
-            // Module 6 (9)
-            { "module": "Poetic Expression", "word": "awe", "chinese_translation": "敬畏 / 驚嘆", "meaning": "Wonder and respect", "example": "Stood in awe of the view." },
-            { "module": "Poetic Expression", "word": "reverence", "chinese_translation": "崇敬 / 尊崇", "meaning": "Deep respect for the sacred", "example": "Spoke with reverence." },
-            { "module": "Poetic Expression", "word": "ineffable", "chinese_translation": "語言難以形容的", "meaning": "Too great for words", "example": "Ineffable joy." },
-            { "module": "Poetic Expression", "word": "luminous", "chinese_translation": "發光的 / 傑出的", "meaning": "Glowing/full of light", "example": "A luminous smile." },
-            { "module": "Poetic Expression", "word": "exquisite", "chinese_translation": "精緻的 / 極美的", "meaning": "Extremely beautiful", "example": "An exquisite dress." },
-            { "module": "Poetic Expression", "word": "ardent", "chinese_translation": "熱烈的 / 熱心的", "meaning": "Passionate/enthusiastic", "example": "An ardent learner." },
-            { "module": "Poetic Expression", "word": "transcend", "chinese_translation": "超越", "meaning": "To rise above limits", "example": "Transcend fear." },
-            { "module": "Poetic Expression", "word": "ethereal", "chinese_translation": "超凡脫俗的 / 飄逸的", "meaning": "Delicate and heavenly", "example": "Ethereal beauty." },
-            { "module": "Poetic Expression", "word": "aesthetic", "chinese_translation": "美學的 / 審美的", "meaning": "Related to beauty or art", "example": "The design is simple yet aesthetic." },
-            // Module 7 (10)
-            { "module": "Inner World", "word": "serendipity", "chinese_translation": "機緣巧合", "meaning": "Pleasant unexpected surprise", "example": "It was pure serendipity." },
-            { "module": "Inner World", "word": "epiphany", "chinese_translation": "頓悟", "meaning": "Sudden realization", "example": "I had an epiphany." },
-            { "module": "Inner World", "word": "solitude", "chinese_translation": "獨處 (平和地)", "meaning": "Being alone peacefully", "example": "Enjoying my solitude." },
-            { "module": "Inner World", "word": "melancholy", "chinese_translation": "憂鬱 / 感傷的", "meaning": "Gentle, thoughtful sadness", "example": "A touch of melancholy." },
-            { "module": "Inner World", "word": "solace", "chinese_translation": "慰藉", "meaning": "Comfort in sadness", "example": "Found solace in nature." },
-            { "module": "Inner World", "word": "ephemeral", "chinese_translation": "轉瞬即逝的", "meaning": "Lasting a short time", "example": "Ephemeral beauty." },
-            { "module": "Inner World", "word": "discernment", "chinese_translation": "洞察力 / 辨別力", "meaning": "Judging wisely", "example": "Listen with discernment." },
-            { "module": "Inner World", "word": "enlightened", "chinese_translation": "受啟發的 / 開明的", "meaning": "Wise and aware", "example": "An enlightened mind." },
-            { "module": "Inner World", "word": "resonant", "chinese_translation": "共鳴的 / 洪亮的", "meaning": "Deep/staying in memory", "example": "A resonant truth." },
-            { "module": "Inner World", "word": "subtle", "chinese_translation": "微妙的 / 不明顯的", "meaning": "Delicate; not obvious", "example": "There was a subtle change in her voice." }
-        ];
+    vocabData.sort((a, b) => a.advanced.localeCompare(b.advanced));
 
-        vocabularyData.sort((a, b) => a.word.localeCompare(b.word));
+    const allData = vocabData;
 
-        const container = document.getElementById('container');
-        const sidebar = document.getElementById('sidebar');
-        const counter = document.getElementById('counter');
-        let currentIndex = 0;
+    const categories = ['All', ...new Set(vocabData.map(item => item.category))];
+    const filterContainer = document.getElementById('filter-container');
+    categories.forEach(cat => {
+      if (!cat) return;
+      const btn = document.createElement('button');
+      btn.className = `filter-btn ${cat === 'All' ? 'active' : ''}`;
+      btn.textContent = cat;
+      btn.onclick = () => filterCards(cat, btn);
+      filterContainer.appendChild(btn);
+    });
 
-        function initCards() {
-            vocabularyData.forEach((item) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-content">
-                        <div class="module-badge">${item.module}</div>
-                        <h1 class="word-title">${item.word}</h1>
-                        <button class="audio-btn" onclick="speak('${item.word}')">🔊</button>
-                        <div class="translation">${item.chinese_translation}</div>
-                        <div class="meaning">${item.meaning}</div>
-                        <div class="example-box">
-                            <strong>Example:</strong><br>
-                            "${item.example}"
-                        </div>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
+    renderCards(allData);
 
-        function initSidebar() {
-            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-            letters.forEach(l => {
-                const span = document.createElement('span');
-                span.innerText = l;
-                span.onclick = () => jumpToLetter(l);
-                sidebar.appendChild(span);
-            });
-        }
+    function filterCards(category, btnElement) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btnElement.classList.add('active');
+      const filtered = category === 'All' ? allData : allData.filter(item => item.category === category);
+      renderCards(filtered);
+    }
 
-        function jumpToLetter(letter) {
-            const index = vocabularyData.findIndex(w => w.word.toUpperCase().startsWith(letter));
-            if (index !== -1) {
-                currentIndex = index;
-                updateView();
-            }
-        }
-
-        function updateView() {
-            container.style.transform = `translateY(-${currentIndex * 100}vh)`;
-            counter.innerText = `${currentIndex + 1} / ${vocabularyData.length}`;
-        }
-
-        function speak(text) {
-            const msg = new SpeechSynthesisUtterance();
-            msg.text = text;
-            msg.lang = 'en-US';
-            msg.rate = 0.8;
-            window.speechSynthesis.speak(msg);
-        }
-
-        let touchStartY = 0;
-        window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
-        window.addEventListener('touchend', e => {
-            const touchEndY = e.changedTouches[0].clientY;
-            const diff = touchStartY - touchEndY;
-            if (Math.abs(diff) > 50) {
-                if (diff > 0 && currentIndex < vocabularyData.length - 1) currentIndex++;
-                else if (diff < 0 && currentIndex > 0) currentIndex--;
-                updateView();
-            }
-        });
-
-        window.addEventListener('wheel', e => {
-            if (e.deltaY > 0 && currentIndex < vocabularyData.length - 1) currentIndex++;
-            else if (e.deltaY < 0 && currentIndex > 0) currentIndex--;
-            updateView();
-        }, { passive: true });
-
-        initCards();
-        initSidebar();
-        updateView();
-    </script>
+    function renderCards(data) {
+      document.getElementById('app').innerHTML = data.map(item => `
+        <div class="card">
+          <div class="top-row">
+            <span class="category-tag">${item.category}</span>
+          </div>
+          <div class="word-comparison">
+            <span class="basic-word">${item.original}</span>
+            <span class="arrow">&#8594;</span>
+            <span class="adv-word">${item.advanced}</span>
+          </div>
+          <div class="moment">${item.moment}</div>
+          <div class="definition">${item.meaning}</div>
+          <div class="example-box">&#8220;${item.example}&#8221;</div>
+        </div>
+      `).join('');
+    }
+  </script>
 </body>
 </html>

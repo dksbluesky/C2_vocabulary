@@ -1,5 +1,5 @@
 // 每次修改 index.html 後，請把這裡的 v1 改成 v2, v3... 以此類推
-const CACHE_NAME = 'vocab-v2'; 
+const CACHE_NAME = 'vocab-v3';
 
 const ASSETS = [
   './',
